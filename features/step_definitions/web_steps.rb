@@ -56,6 +56,9 @@ When /^(?:|I )choose "([^"]*)"$/ do |field|
   choose(field)
 end
 
+When /^I fill in "([^\"]*)" with "([^\"]*)"$/ do |field, value|
+  fill_in(field, :with=>value)
+end
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
   if page.respond_to? :should
@@ -65,6 +68,9 @@ Then /^(?:|I )should see "([^"]*)"$/ do |text|
   end
 end
 
+Then /^I should see id "([^\"]*)"$/ do |id|
+  page.should have_css(id)
+end
 
 Then /^the "([^"]*)" field(?: within (.*))? should contain "([^"]*)"$/ do |field, parent, value|
   with_scope(parent) do
@@ -88,7 +94,6 @@ Then /^(?:|I )should be on (.+)$/ do |page_name|
   end
 end
 
-
 Then /^show me the page$/ do
   save_and_open_page
 end
@@ -101,12 +106,13 @@ Then /^I should see the image "(.+)"$/ do |image|
     end
 end
 
-Given(/^I am on \/add_a_rack$/) do
-  visit(add_a_rack) # express the regexp above with the code you wish you had
+Then(/^bike should be marked out for maintenence$/) do
+  bike = Bike.create!( bike_id: '1', location_id: '1' )
+  bike.setOutForMaintence
 end
 
-Then(/^I should see "(.*?)"$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
+Given(/^I am on \/add_a_rack$/) do
+  visit(add_a_rack) # express the regexp above with the code you wish you had
 end
 
 Then /^the checkbox "(.+)" should be unchecked$/ do |checkbox|

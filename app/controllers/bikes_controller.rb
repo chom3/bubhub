@@ -102,13 +102,29 @@ class BikesController < ApplicationController
 		render "bike_add"
 	end
 
-	def bike_look_up
-		@bikes.each do |bike|
-			if bike.bike_id ==params[:bike_id]	
-				
+	def look_up
+		if(params[:bike][:bike_id].present?)
+			@bike = Bike.find_by bike_id: params[:bike][:bike_id]
+			if(params[:bike][:bike_id].present? && !(@bike.nil?))
+				flash[:notice] = "Bike is at location LOCATION"
+			else
+				flash[:notice] = "Bike is currently out"
 			end
 		end
+		redirect_to bike_look_up_page_path and return
 	end
-end
 
-		
+  def select
+    @bike = Bike.find_by_id(params[:id].to_i)
+    if @bike == nil or not @bike.is_available?
+      redirect_to invalid_selection_bikes_path
+    end
+  end
+
+  def invalid_selection
+  end
+
+  def favorites
+    render "add_favorites"  
+  end
+end		

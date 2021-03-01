@@ -2,12 +2,11 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-<<<<<<< HEAD
 require 'factory_girl'
-=======
->>>>>>> 615e2779df0e990f73e21354f679d6d7038e96d9
 require 'factory_girl_rails'
 require 'capybara/rspec'
+require 'simplecov'
+SimpleCov.start 'rails'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -23,6 +22,9 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  config.color_enabled = true
+  config.tty = true
+  config.formatter = :documentation
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:

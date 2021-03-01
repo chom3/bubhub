@@ -7,9 +7,14 @@ class UsersController < ApplicationController
     @user.email = params[:user][:email]
     @user.pin = params[:user][:pin]
 
+#if verify_recaptcha(model: @user, message: "Oh! It's error with reCAPTCHA!") && @user.save
+    @user.assigned_bike = params[:user][:assigned_bike]
+    @user.total_ride_time = params[:user][:total_ride_time]
+    @user.total_number_of_rides = params[:user][:total_number_of_rides]
     if @user.save
       @createdUser = User.find_by(bu_id: @user.bu_id)
       flash[:notice] = " An account for #{@createdUser.first_name} #{@createdUser.last_name} was successfully created"
+      UserMailer.welcome_email(@user).deliver
       redirect_to root_page_path and return
     else
       flash[:error]= "Please fill in all required fields."
@@ -25,15 +30,19 @@ class UsersController < ApplicationController
   end
 
   def update
+    redirect_to root_page_path
   end
 
   def delete
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :bu_id, :pin)
+   params.require(:user).permit(:first_name, :last_name, :email, :bu_id, :pin, :assigned_bike, :total_ride_time, :total_number_of_rides)
   end
 
+  def register
+    render "register"
+  end
   def index
     render "register"
   end
